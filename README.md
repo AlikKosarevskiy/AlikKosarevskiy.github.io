@@ -47,10 +47,7 @@
   <script src="script.js"></script>
 </body>
 </html>
-first Github site
-<?php
-echo "PHP did not works";
-?>
+
 In this example, you have the basic structure of an HTML page. You can customize it further by adding your own content and styling. You can create a CSS file (styles.css) to define the appearance of your page and a JavaScript file (script.js) to add interactivity if needed. Make sure to replace the URLs in the project list with your actual project URLs.
 
 Keep in mind that PHP code won't work on a static GitHub.io page as it only supports HTML, CSS, and JavaScript. If you have any dynamic functionality or server-side processing, you'll need to explore other hosting options or use static site generators like Jekyll or Hugo.
