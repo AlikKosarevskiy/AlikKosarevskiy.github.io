@@ -1,5 +1,5 @@
 # AlikKosarevskiy.github.io
-first site
+first Github site
 <?php
-echo "echo не требует скобок.";
+echo "PHP did not works";
 ?>
