@@ -4,24 +4,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-      <style>
-        body {
-            background-color: blue;
-            color: white;
-            text-align: center;
-            font-family: Arial, sans-serif;
-        }
-        
-        h1 {
-            padding-top: 150px;
-            font-size: 36px;
-        }
-        
-        p {
-            font-size: 18px;
-        }
-    </style>
-  <link rel="stylesheet" href="styles.css">
+      <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header>
