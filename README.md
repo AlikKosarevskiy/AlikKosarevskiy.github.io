@@ -30,7 +30,7 @@
     <ul>
       <li><a href="https://github.com/user1/project1">Project 1</a></li>
       <li><a href="https://github.com/user1/project2">Project 2</a></li>
-      <li><a href="https://github.com/user1/project3">Project 3</a></li>
+      <li><a href="http://wgstar.unaux.com/insert.php">Project 3</a></li>
     </ul>
   </section>
   
