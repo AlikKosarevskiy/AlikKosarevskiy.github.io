@@ -1,1 +1,1 @@
-echo ("Test echo");
+<? echo ("Test echo");   ?>
