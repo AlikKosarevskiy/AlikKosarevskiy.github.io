@@ -2,59 +2,140 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AlikKosarevskiy GitHub.io Page</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>Hill Car</title>
+  <style>
+    canvas {
+      background: #cceeff;
+      display: block;
+      margin: auto;
+    }
+    #controls {
+      text-align: center;
+      margin-top: 10px;
+    }
+    button {
+      font-size: 1.5em;
+      padding: 10px 20px;
+      margin: 5px;
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <h1>Welcome to My GitHub.io Page</h1>
-  </header>
 
-  <nav>
-    <ul>
-      <li><a href="#about">About</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </nav>
+<canvas id="gameCanvas" width="800" height="400"></canvas>
+<div id="controls">
+  <button id="gasBtn">Газ</button>
+  <button id="brakeBtn">Тормоз</button>
+</div>
 
-  <section id="about">
-    <h2>About Me</h2>
-    <p>Write a brief introduction about yourself or your project.</p>
-  </section>
+<script>
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
 
-  <section id="projects">
-    <h2>My Projects</h2>
-    <ul>
-      <li><a href="https://github.com/user1/project1">Project 1</a></li>
-      <li><a href="https://github.com/user1/project2">Project 2</a></li>
-      <li><a href="https://github.com/user1/project3">Project 3</a></li>
-    </ul>
-  </section>
+let car = {
+  x: 100,
+  y: 0,
+  vx: 0,
+  vy: 0,
+  width: 50,
+  height: 20,
+  rotation: 0,
+  onGround: false
+};
 
-  <section id="contact">
-    <h2>Contact Me</h2>
-    <p>Email: user@example.com</p>
-    <p>Phone: 123-456-7890</p>
-  </section>
+let gravity = 0.3;
+let gas = false;
+let brake = false;
+let terrain = [];
+let speed = 0.1;
 
-  <!-- JavaScript Demo Section -->
-  <section id="js-demo">
-    <h2>JavaScript Demo</h2>
-    <p id="demo-text">Click the button to see some magic!</p>
-    <button onclick="changeText()">Click Me</button>
-  </section>
+// Генерация холмистой местности
+for (let i = 0; i < 1000; i++) {
+  terrain.push(300 + 50 * Math.sin(i * 0.1));
+}
 
-  <footer>
-    <p>&copy; 2023 AlikKosarevskiy</p>
-  </footer>
+function drawCar() {
+  ctx.save();
+  ctx.translate(car.x, car.y);
+  ctx.rotate(car.rotation);
+  ctx.fillStyle = "red";
+  ctx.fillRect(-car.width / 2, -car.height / 2, car.width, car.height);
+  ctx.restore();
+}
 
-  <script>
-    // Простая функция для изменения текста
-    function changeText() {
-      document.getElementById('demo-text').innerText = "You clicked the button! JavaScript is working!";
-    }
-  </script>
+function drawTerrain() {
+  ctx.beginPath();
+  ctx.moveTo(0, terrain[0]);
+  for (let i = 1; i < canvas.width; i++) {
+    ctx.lineTo(i, terrain[Math.floor(car.x - canvas.width/2 + i)] || 400);
+  }
+  ctx.strokeStyle = "green";
+  ctx.lineWidth = 2;
+  ctx.stroke();
+}
+
+function gameLoop() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  let index = Math.floor(car.x);
+  let terrainY = terrain[index] || 400;
+
+  car.vy += gravity;
+
+  if (gas) car.vx += speed;
+  if (brake) car.vx -= speed * 1.2;
+
+  car.x += car.vx;
+  car.y += car.vy;
+
+  // Поворот машины при наклоне дороги
+  let y1 = terrain[index - 1] || terrainY;
+  let y2 = terrain[index + 1] || terrainY;
+  let angle = Math.atan2(y2 - y1, 2);
+  car.rotation = angle;
+
+  // Столкновение с землёй
+  if (car.y > terrainY - car.height / 2) {
+    car.y = terrainY - car.height / 2;
+    car.vy = 0;
+    car.onGround = true;
+  } else {
+    car.onGround = false;
+  }
+
+  // Простая логика "переворота"
+  if (Math.abs(car.rotation) > 1.5) {
+    alert("Ты перевернулся!");
+    resetGame();
+    return;
+  }
+
+  // Центрируем экран на машине
+  ctx.save();
+  ctx.translate(-car.x + canvas.width / 2, 0);
+  drawTerrain();
+  drawCar();
+  ctx.restore();
+
+  requestAnimationFrame(gameLoop);
+}
+
+function resetGame() {
+  car.x = 100;
+  car.y = 200;
+  car.vx = 0;
+  car.vy = 0;
+  car.rotation = 0;
+}
+
+document.getElementById("gasBtn").addEventListener("mousedown", () => gas = true);
+document.getElementById("gasBtn").addEventListener("mouseup", () => gas = false);
+document.getElementById("brakeBtn").addEventListener("mousedown", () => brake = true);
+document.getElementById("brakeBtn").addEventListener("mouseup", () => brake = false);
+
+resetGame();
+gameLoop();
+</script>
+
 </body>
 </html>
